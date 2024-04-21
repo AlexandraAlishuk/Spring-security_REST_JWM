@@ -1,0 +1,39 @@
+<!--Это настройка логирования: отображение логов, сохранение логов в файл-->
+<!--Для запуска - создать файл logback.xml и вставить этот код-->
+<!--Также можно настроить логирование с помощью Log4J2, который работает с асинхронными процессами. Для этого смотреть: https://www.youtube.com/watch?v=bDhRkDz6a7Q&t=728s-->
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%-30(%d %p) %-30.30([%t] %C): %msg%n%throwable</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app-logback.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p [%t] %C: %msg%n%throwable</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/archived/app-%d{yyyy-MM-dd}.%i-logback.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="File" />
+        <appender-ref ref="Console" />
+    </root>
+
+    <logger name="ru.spring.springboot.springsecurity_rest_jwm" level="INFO" additivity="false">
+        <appender-ref ref="File" />
+        <appender-ref ref="Console" />
+    </logger>
+
+</configuration>
